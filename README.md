@@ -1,8 +1,8 @@
-# 📄 Document Embedding
+#  Document Embedding
 
 A Python-based document embedding pipeline that loads documents, splits them into smaller chunks, generates embeddings, and stores them in a vector database for semantic search and RAG applications.
 
-## 🚀 Features
+##  Features
 
 * Load PDF, TXT, and DOCX documents
 * Text extraction and chunking
@@ -12,7 +12,7 @@ A Python-based document embedding pipeline that loads documents, splits them int
 * Jupyter notebooks for experimentation
 * Secure API key management using `.env`
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 * Python
 * LangChain
@@ -22,7 +22,7 @@ A Python-based document embedding pipeline that loads documents, splits them int
 * Jupyter Notebook
 * UV
 
-## 🔄 Workflow
+##  Workflow
 
 ```text
 Document
@@ -42,7 +42,7 @@ Relevant Chunks
 RAG Application
 ```
 
-## 📁 Project Structure
+##  Project Structure
 
 ```text
 Document-Embedding/
@@ -61,7 +61,7 @@ Document-Embedding/
 └── README.md
 ```
 
-## ⚙️ Setup
+##  Setup
 
 Clone the repository:
 
@@ -107,7 +107,7 @@ notebook/document.ipynb
 notebook/pdf_loader.ipynb
 ```
 
-## 🔮 Future Improvements
+##  Future Improvements
 
 * Complete RAG question-answering pipeline
 * FastAPI backend
@@ -116,7 +116,7 @@ notebook/pdf_loader.ipynb
 * Docker support
 * Retrieval evaluation
 
-## 👨‍💻 Author
+##  Author
 
 **Pankaj Dhurandher**
 
