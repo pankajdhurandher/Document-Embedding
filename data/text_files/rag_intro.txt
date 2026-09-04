@@ -1,0 +1,399 @@
+A typical RAG system looks like:
+
+Documents → Loading → Splitting/Chunking → Embeddings → Vector Database → Retrieval → Prompt → LLM → Answer
+
+And then you can extend it with reranking, conversation memory, agents, tools, evaluation, and production deployment.
+
+RAG topics in the right learning order
+1. Python fundamentals
+
+Before RAG, be comfortable with:
+
+Functions
+Classes/OOP
+Lists, dictionaries, sets
+File handling
+Exceptions
+Virtual environments
+pip / uv
+APIs and JSON
+Environment variables
+
+Implementation: Build a small Python program that reads a text/PDF file and processes its contents.
+
+2. LLM fundamentals
+
+Understand:
+
+What an LLM is
+Tokens
+Context window
+Prompt
+Temperature
+System/user messages
+Chat models
+API-based vs local models
+Hugging Face models
+Ollama/local LLMs
+
+Implementation: Create a simple chatbot using an LLM API or Ollama.
+
+3. Document Loaders
+
+A RAG system needs to get information from documents.
+
+Common sources:
+
+PDF
+TXT
+DOCX
+CSV
+Web pages
+HTML
+Notion
+Databases
+Google Drive
+
+Libraries/tools:
+
+LangChain document loaders
+LlamaIndex readers
+PyPDF/PyMuPDF
+BeautifulSoup
+
+For example:
+
+resume.pdf
+     ↓
+PDF Loader
+     ↓
+raw text
+
+Implementation: Build a program that loads a PDF and prints its text.
+
+4. Document Parsing
+
+Loading a file and extracting good-quality text are slightly different things.
+
+You need to understand:
+
+Text extraction
+Tables
+Images
+Headers/footers
+Metadata
+OCR
+Structured documents
+
+For example, a PDF might contain:
+
+Page 1
+Title
+Introduction
+...
+
+Page 2
+Table
+...
+
+Your parser should preserve useful information rather than producing messy text.
+
+Implementation: Extract text + page number + metadata from a PDF.
+
+5. Text Splitting / Chunking ⭐
+
+This is one of the most important RAG concepts.
+
+Instead of putting a 100-page document directly into the LLM, divide it into smaller pieces.
+
+100-page PDF
+      ↓
+     chunks
+      ↓
+Chunk 1
+Chunk 2
+Chunk 3
+...
+Chunk 500
+
+Learn:
+
+Chunk size
+Chunk overlap
+Character splitting
+Recursive splitting
+Sentence splitting
+Paragraph splitting
+Semantic chunking
+Structure-aware chunking
+
+Example:
+
+chunk_size = 500
+overlap = 100
+
+Implementation: Take a PDF and generate chunks.
+
+6. Metadata
+
+Every chunk can have additional information.
+
+Example:
+
+{
+    "text": "RAG combines retrieval with generation...",
+    "page": 12,
+    "source": "rag.pdf",
+    "section": "Introduction"
+}
+
+Metadata becomes extremely useful later for:
+
+Filtering
+Citations
+Debugging
+Retrieval
+Document identification
+
+Implementation: Attach page number and filename to every chunk.
+
+7. Embeddings ⭐⭐⭐
+
+This is the core concept behind semantic search.
+
+An embedding converts text into numbers:
+
+"Python is a programming language"
+             ↓
+[0.12, -0.42, 0.87, ...]
+
+The resulting vector represents the meaning of the text.
+
+Learn:
+
+Embedding models
+Vector representations
+Dimensions
+Similarity
+Cosine similarity
+Euclidean distance
+Dot product
+
+For example:
+
+"How does Python work?"
+        ↓
+   embedding vector
+        ↓
+[0.21, 0.83, -0.14, ...]
+
+Implementation: Generate embeddings for your document chunks.
+
+8. Vector Database ⭐⭐⭐
+
+Now you need somewhere to store those embeddings.
+
+Popular options:
+
+FAISS
+Chroma
+Qdrant
+Pinecone
+Weaviate
+Milvus
+pgvector
+
+Conceptually:
+
+Chunk
+ ↓
+Embedding
+ ↓
+Vector DB
+
+Vector DB
+ ├── vector
+ ├── original text
+ └── metadata
+
+For learning, I'd recommend starting with:
+
+FAISS or Chroma → Qdrant → Pinecone/other managed DB
+
+Implementation: Store your document embeddings in a vector database.
+
+9. Similarity Search
+
+Suppose the user asks:
+
+"What is RAG?"
+
+Convert the question into an embedding:
+
+User question
+     ↓
+Embedding
+     ↓
+Query vector
+
+Then compare it against your stored vectors.
+
+Query
+ ↓
+Vector DB
+ ↓
+Most similar chunks
+
+Learn:
+
+Top-K retrieval
+Cosine similarity
+Similarity threshold
+Metadata filtering
+
+Implementation:
+
+Question
+   ↓
+Embedding
+   ↓
+Vector DB
+   ↓
+Top 5 chunks
+10. Retriever ⭐⭐⭐
+
+A retriever is the component responsible for finding relevant information.
+
+Instead of directly working with the vector database:
+
+Question → Vector DB
+
+you generally build:
+
+Question
+   ↓
+Retriever
+   ↓
+Vector DB
+   ↓
+Relevant documents
+
+Learn:
+
+Vector retriever
+Keyword/BM25 retriever
+Hybrid retriever
+Multi-query retrieval
+Metadata filtering
+
+Implementation: Create a retriever that returns the top relevant chunks.
+
+11. Prompt Engineering
+
+Now you have:
+
+User question
++
+Retrieved context
+
+You need to tell the LLM how to use that context.
+
+Conceptually:
+
+Context:
+{retrieved_documents}
+
+Question:
+{user_question}
+
+Answer using the provided context.
+
+Learn:
+
+System prompts
+Context injection
+Instructions
+Few-shot prompting
+Grounding
+Handling missing information
+Citation instructions
+
+Implementation: Give retrieved chunks + question to an LLM and generate an answer.
+
+12. Basic RAG Pipeline ⭐⭐⭐⭐⭐
+
+At this point you can build your first complete RAG system:
+
+             OFFLINE
+                │
+             PDF files
+                ↓
+          Document Loader
+                ↓
+             Chunking
+                ↓
+            Embeddings
+                ↓
+          Vector Database
+                │
+                │
+             ONLINE
+                │
+          User Question
+                ↓
+            Embedding
+                ↓
+            Retriever
+                ↓
+       Relevant Documents
+                ↓
+          Prompt + Context
+                ↓
+               LLM
+                ↓
+             Answer
+
+This is the most important milestone.
+
+After Basic RAG
+
+Once you understand the above, move into more advanced RAG.
+
+13. LangChain
+
+Learn LangChain after understanding the underlying concepts.
+
+Important LangChain components:
+
+Document Loaders
+Text Splitters
+Embeddings
+Vector Stores
+Retrievers
+Prompt Templates
+Chains
+Output Parsers
+
+Don't just memorize:
+
+some_langchain_function()
+
+Understand what that function is actually doing.
+
+14. LlamaIndex
+
+Then learn LlamaIndex.
+
+It is particularly useful for:
+
+Document indexing
+Data ingestion
+Retrieval
+Query engines
+RAG pipelines
+
+You can eventually compare:
+
+LangChain
+vs
+LlamaIndex
